@@ -1,0 +1,305 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>blog</title><meta name="generator" content="MATLAB 8.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-02-03"><meta name="DC.source" content="blog.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1></h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Surprising SVD, Square Waves, and Pi</a></li><li><a href="#2">The Nonsymmetric Hilbert Matrix</a></li><li><a href="#4">Singular Values</a></li><li><a href="#6">High Precision Calculation</a></li><li><a href="#10">Seymour Parter</a></li><li><a href="#12">Toeplitz Matrices</a></li><li><a href="#15">Square Wave</a></li><li><a href="#22">E. E. Tyrtyshnikov</a></li><li><a href="#23">References</a></li></ul></div><h2>Surprising SVD, Square Waves, and Pi<a name="1"></a></h2><p>I am surprised when many of the singular values of a nonsymmetric variant of the Hilbert matrix turn out to be nearly equal to <img src="blog_eq11731.png" alt="$\pi$">. The explanation involves the Fourier series for a square wave.</p><h2>The Nonsymmetric Hilbert Matrix<a name="2"></a></h2><p>My very first project in matrix computation involved the Hilbert matrix. It had been introduced in 1894 by the famous mathematician David Hilbert as what we would today call the coefficient matrix in the normal equations for least squares approximations by polynomials with their monomial basis. The elements of an <img src="blog_eq25947.png" alt="$n$"> -by- <img src="blog_eq25947.png" alt="$n$"> Hilbert matrix are</p><p><img src="blog_eq00443.png" alt="$$ a_{i,j} = \frac{1}{i+j-1}, \ \ i,j = 1,...,n $$"></p><p>Some years ago I wanted a nonsymmetric test matrix, so I changed the plus sign in the denominator to a minus sign, but those elements blew up along the subdiagonal, so I also changed the -1 to +1/2.</p><p><img src="blog_eq27121.png" alt="$$ a_{i,j} = \frac{1}{i-j+1/2}, \ \ i,j = 1,...,n $$"></p><p>I refer to this as the nonsymmetric Hilbert Matrix.  Here is the 5-by-5 with <tt>format rat</tt>.</p><pre class="codeinput">   format <span class="string">rat</span>
+   n = 5;
+   [I,J] = ndgrid(1:n);
+   A = 1./(I-J+1/2)
+</pre><h2>Singular Values<a name="4"></a></h2><p>I was amazed I happened to compute the singular values.  Here are all of the singular values of the 30-by-30 nonsymmetric Hilbert matrix.</p><pre class="codeinput">   format <span class="string">long</span>
+   n = 30;
+   [I,J] = ndgrid(1:n);
+   A = 1./(I-J+1/2);
+   sigma = svd(A)
+</pre><p>Incredibly, half of them are equal to <tt>pi</tt> to the full length of our long format, that's 16 digits.  And all but the last few are equal to <tt>pi</tt> to at least a couple of digits.  How did that happen?</p><h2>High Precision Calculation<a name="6"></a></h2><p>Let's do the 30-by-30 SVD again, this time using the Symbolic Toolbox with 100-digit arithmetic.  The computation takes about a minute and a half on my machine.</p><pre class="codeinput">   tic
+   digits(100)
+   n = 30;
+   [I,J] = ndgrid(sym(1:n));
+   A = 1./(I-J+1/2);
+   sigma = svd(A);
+   toc
+</pre><p>Here is the first singular value, to 100 digits.</p><pre class="codeinput">   sigma1 = sigma(1)
+</pre><p>Here is a logarithmic plot of the difference between the singular values and <img src="blog_eq11731.png" alt="$\pi$">.</p><pre class="codeinput">   semilogy(abs(pi - sigma),<span class="string">'.'</span>)
+   xlabel(<span class="string">'n'</span>)
+   ylabel(<span class="string">'|\pi - \sigma|'</span>);
+</pre><p>The first singular value equals <img src="blog_eq11731.png" alt="$\pi$"> to 44 digits and, as our double precision computation predicted, fifteen of the thirty singular values equal <img src="blog_eq11731.png" alt="$\pi$"> to at least 15 digits.</p><h2>Seymour Parter<a name="10"></a></h2><p>Seymour Parter was a visiting professor at Stanford when I was a grad student there in the early 1960s.  I took an individual reading course under his supervision.  He went from Stanford to the University of Wisconsin, where he spent the rest of his career as a Professor of Mathematics and Computer Sciences.  He was President of SIAM in 1981 and '82.</p><p>In 1985, the Second SIAM Conference on Linear Algebra was held at North Carolina State University in Raleigh.  I demonstrated MATLAB during the coffee breaks.  We didn't really have a booth, just a desk or table. I used this example in my demonstration and asked conference attendees if they could explain the appearance of <img src="blog_eq11731.png" alt="$\pi$">.  Seymour said that he could. He had written two papers twenty years earlier about eigenvalues of Toeplitz matrices that were relevant.  He soon produced another paper, referenced below, that explains the behavior of the singular values of my nonsymmetric Hilbert matrix.  It is related to a result from 1920 by the famous Hungarian mathematician Gabor Szego.</p><h2>Toeplitz Matrices<a name="12"></a></h2><p>Our matrix <img src="blog_eq31461.png" alt="$A$"> is constant along its diagonals, so it is a Toeplitz matrix. So is the <img src="blog_eq05014.png" alt="$2n$"> -by- <img src="blog_eq05014.png" alt="$2n$"> matrix <img src="blog_eq73617.png" alt="$B$"> constructed from <img src="blog_eq31461.png" alt="$A$"> by the MATLAB array operation</p><pre>Z = zeros(size(A));
+B = -i*[Z A; -A' 0];</pre><p>The matrix <img src="blog_eq73617.png" alt="$B$"> is both Hermitian and Toeplitz.  Its eigenvalues are real and occur in plus/minus pairs.  The absolute values of the eigenvalues of <img src="blog_eq73617.png" alt="$B$"> are the singular values of <img src="blog_eq31461.png" alt="$A$">, each repeated twice.</p><p>Szego's 1920 theorem says that the eigenvalues of the Toeplitz matrix formed from the coefficients in the Fourier expansion of a function converge to the max and min of that function.</p><p>Parter realized two important facts.  First, that he could analyze the singular values of my nonsymmetric matrix <img src="blog_eq31461.png" alt="$A$"> by looking at the eigenvalues of the Hermitian matrix <img src="blog_eq73617.png" alt="$B$">.  And second, that the elements of <img src="blog_eq31461.png" alt="$A$"> and <img src="blog_eq73617.png" alt="$B$"> are the reciprocals of odd integers, which are the coefficients of the Fourier expansion of a square wave.  So Szego's 1920 theorem implies that the largest eigenvalues of <img src="blog_eq73617.png" alt="$B$"> and hence the largest singular values of <img src="blog_eq31461.png" alt="$A$"> converge to the maximum of that square wave.</p><h2>Square Wave<a name="15"></a></h2><p>There is already a hint of what is going on in an old MATLAB demo named <tt>xfourier</tt>.  The first line of <tt>xfourier</tt> says</p><p>
+<p style="margin-left:3ex;">
+This example shows (graphically) how the Fourier series expansion for
+a square wave is made up of a sum of odd harmonics.
+</p>
+</p><p>The core of <tt>xfourier</tt> is a code fragment similar to this.</p><pre class="codeinput">sin
+</pre><p>The plot shows two things.  First you notice the overshoot at the ends of the intervals known as the Gibbs phenomenon.  But more important for our purposes here is the convergence in the interior of the intervals to values near plus and minus 0.8.</p><p>Let's use more terms and take a closer look.</p><p>%    t = -pi:pi/256:pi; y = zeros(size(t)); for k = 1:2:599 %       y = y + sin(k*t)/k; %    end plot(t,y) axis([0 pi .76 .81])</p><p>We find the sum is pointwise converging to a value near 0.7854. The fragment code is approximating the Fourier sine expansion</p><p><img src="blog_eq82369.png" alt="$$ s(t) = \sum_{odd\ k}\frac{\sin{kt}}{k} $$"></p><p>The coefficients are the reciprocals of odd integers, which are the same as the elements of the nonsymmetric Hilbert matrix.</p><p>The Fourier series converges pointwise to <img src="blog_eq83548.png" alt="$\pm\pi/4$">. If we trace this fact back through  Parter's analysis and Szego's theorem, we have an explanation for the fact that the largest singular values of the nonsymmetric Hilbert matrix are converging to <img src="blog_eq11731.png" alt="$\pi$">.</p><h2>E. E. Tyrtyshnikov<a name="22"></a></h2><p>Evgenij E. Tyrtyshnikov is a Professor and Deputy Director of the Institute of Numerical Mathematics of the Russian Academy of Sciences in Moscow. In 1991 he studied the behavior of the small singular values of this matrix. And in 1992 he considered the matrices where the 1/2 is replaced by any noninteger value.</p><h2>References<a name="23"></a></h2><p>Seymour V. Parter, On the distribution of the singular values of Toeplitz matrices, <i>Linear Algebra and its Applications</i> 80, 1986, 115-130, <a href="http://www.sciencedirect.com/science/article/pii/0024379586902806">&lt;http://www.sciencedirect.com/science/article/pii/0024379586902806</a>&gt;</p><p>Evgenij E. Tyrtyshnikov, Cauchy-Toeplitz matrices and some applications, <i>Linear Algebra and its Applications</i> 149, 1991, 1-18, <a href="http://www.sciencedirect.com/science/article/pii/002437959190321M">&lt;http://www.sciencedirect.com/science/article/pii/002437959190321M</a>&gt;</p><p>Evgenij E. Tyrtyshnikov, Singular values of cauchy-toeplitz matrices, <i>Linear Algebra and its Applications</i> 161, 1992, 99-116, <a href="http://www.sciencedirect.com/science/article/pii/002437959290007W">&lt;http://www.sciencedirect.com/science/article/pii/002437959290007W</a>&gt;</p><p><i>Copyright 2014 The MathWorks, Inc.</i></p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2012b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+
+%% Surprising SVD, Square Waves, and Pi
+% I am surprised when many of the singular values of a nonsymmetric
+% variant of the Hilbert matrix turn out to be nearly equal to $\pi$.
+% The explanation involves the Fourier series for a square wave.
+
+%% The Nonsymmetric Hilbert Matrix
+% My very first project in matrix computation involved the Hilbert matrix.
+% It had been introduced in 1894 by the famous mathematician David Hilbert
+% as what we would today call the coefficient matrix in the normal equations
+% for least squares approximations by polynomials with their monomial basis.
+% The elements of an $n$ -by- $n$ Hilbert matrix are
+%
+% $$ a_{i,j} = \frac{1}{i+j-1}, \ \ i,j = 1,...,n $$
+%
+
+%%
+% Some years ago I wanted a nonsymmetric test matrix, so I changed the plus
+% sign in the denominator to a minus sign, but those elements blew up along
+% the subdiagonal, so I also changed the -1 to +1/2.
+%
+% $$ a_{i,j} = \frac{1}{i-j+1/2}, \ \ i,j = 1,...,n $$
+%
+% I refer to this as the nonsymmetric Hilbert Matrix.  Here is the 5-by-5
+% with |format rat|.
+
+   format rat
+   n = 5;
+   [I,J] = ndgrid(1:n);
+   A = 1./(I-J+1/2)
+
+%% Singular Values
+% I was amazed I happened to compute the singular values.  Here are
+% all of the singular values of the 30-by-30 nonsymmetric Hilbert matrix.
+
+   format long
+   n = 30;
+   [I,J] = ndgrid(1:n);
+   A = 1./(I-J+1/2);
+   sigma = svd(A)
+
+ %%
+% Incredibly, half of them are equal to |pi| to the full length of our
+% long format, that's 16 digits.  And all but the last few are equal to |pi|
+% to at least a couple of digits.  How did that happen?
+
+
+%% High Precision Calculation
+% Let's do the 30-by-30 SVD again, this time using the Symbolic Toolbox
+% with 100-digit arithmetic.  The computation takes about a minute and a
+% half on my machine.
+
+   tic
+   digits(100)
+   n = 30;
+   [I,J] = ndgrid(sym(1:n));
+   A = 1./(I-J+1/2);
+   sigma = svd(A);
+   toc 
+
+%%
+% Here is the first singular value, to 100 digits.
+
+   sigma1 = sigma(1)
+
+%%
+% Here is a logarithmic plot of the difference between the singular values
+% and $\pi$.
+
+   semilogy(abs(pi - sigma),'.')
+   xlabel('n')
+   ylabel('|\pi - \sigma|');
+
+%%
+% The first singular value equals $\pi$ to 44 digits and, as our double
+% precision computation predicted, fifteen of the thirty singular values
+% equal $\pi$ to at least 15 digits.
+
+%% Seymour Parter
+% Seymour Parter was a visiting professor at Stanford when I was a grad
+% student there in the early 1960s.  I took an individual reading course
+% under his supervision.  He went from Stanford to the University of Wisconsin,
+% where he spent the rest of his career as a Professor of Mathematics and
+% Computer Sciences.  He was President of SIAM in 1981 and '82.
+
+%%
+% In 1985, the Second SIAM Conference on Linear Algebra was held at North
+% Carolina State University in Raleigh.  I demonstrated MATLAB during the
+% coffee breaks.  We didn't really have a booth, just a desk or table. 
+% I used this example in my demonstration and asked conference attendees
+% if they could explain the appearance of $\pi$.  Seymour said that he could.
+% He had written two papers twenty years earlier about eigenvalues of Toeplitz
+% matrices that were relevant.  He soon produced another paper, referenced
+% below, that explains the behavior of the singular values of my nonsymmetric
+% Hilbert matrix.  It is related to a result from 1920 by the famous Hungarian
+% mathematician Gabor Szego.
+
+%% Toeplitz Matrices
+% Our matrix $A$ is constant along its diagonals, so it is a Toeplitz matrix.
+% So is the $2n$ -by- $2n$ matrix $B$ constructed from $A$ by the MATLAB
+% array operation
+%
+%  Z = zeros(size(A)); 
+%  B = -i*[Z A; -A' 0];
+%
+% The matrix $B$ is both Hermitian and Toeplitz.  Its eigenvalues are real
+% and occur in plus/minus pairs.  The absolute values of the eigenvalues
+% of $B$ are the singular values of $A$, each repeated twice.
+
+%%
+% Szego's 1920 theorem says that the eigenvalues of the Toeplitz matrix
+% formed from the coefficients in the Fourier expansion of a function converge
+% to the max and min of that function.
+
+%%
+% Parter realized two important facts.  First, that he could analyze the
+% singular values of my nonsymmetric matrix $A$ by looking at the eigenvalues
+% of the Hermitian matrix $B$.  And second, that the elements of $A$ and
+% $B$ are the reciprocals of odd integers, which are the coefficients of
+% the Fourier expansion of a square wave.  So Szego's 1920 theorem implies
+% that the largest eigenvalues of $B$ and hence the largest singular values
+% of $A$ converge to the maximum of that square wave.
+
+%% Square Wave
+% There is already a hint of what is going on in an old MATLAB demo named
+% |xfourier|.  The first line of |xfourier| says
+%
+% <html>
+% <p style="margin-left:3ex;">
+% This example shows (graphically) how the Fourier series expansion for
+% a square wave is made up of a sum of odd harmonics.
+% </p>
+% </html>
+
+%%
+% The core of |xfourier| is a code fragment similar to this.
+
+sin
+%%
+
+%%
+% The plot shows two things.  First you notice the overshoot at the ends of
+% the intervals known as the Gibbs phenomenon.  But more important for our
+% purposes here is the convergence in the interior of the intervals to values
+% near plus and minus 0.8.
+
+%%
+% Let's use more terms and take a closer look.
+% 
+% %    t = -pi:pi/256:pi; y = zeros(size(t)); for k = 1:2:599
+% %       y = y + sin(k*t)/k;
+% %    end plot(t,y) axis([0 pi .76 .81])
+
+%%
+% We find the sum is pointwise converging to a value near 0.7854.
+% The fragment code is approximating the Fourier sine expansion
+%
+% $$ s(t) = \sum_{odd\ k}\frac{\sin{kt}}{k} $$
+%
+% The coefficients are the reciprocals of odd integers, which are the same
+% as the elements of the nonsymmetric Hilbert matrix.
+
+%%
+% The Fourier series converges pointwise to $\pm\pi/4$.
+% If we trace this fact back through  Parter's analysis and Szego's theorem,
+% we have an explanation for the fact that the largest singular values of the
+% nonsymmetric Hilbert matrix are converging to $\pi$.
+
+%% E. E. Tyrtyshnikov
+% Evgenij E. Tyrtyshnikov is a Professor and Deputy Director of the Institute
+% of Numerical Mathematics of the Russian Academy of Sciences in Moscow.
+% In 1991 he studied the behavior of the small singular values of this matrix.
+% And in 1992 he considered the matrices where the 1/2 is replaced by any
+% noninteger value.
+
+%% References
+% Seymour V. Parter, 
+% On the distribution of the singular values of Toeplitz matrices,
+% _Linear Algebra and its Applications_ 80, 1986, 115-130,
+% <http://www.sciencedirect.com/science/article/pii/0024379586902806
+% http://www.sciencedirect.com/science/article/pii/0024379586902806>
+
+%%
+% Evgenij E. Tyrtyshnikov,
+% Cauchy-Toeplitz matrices and some applications,
+% _Linear Algebra and its Applications_ 149, 1991, 1-18,
+% <http://www.sciencedirect.com/science/article/pii/002437959190321M
+% http://www.sciencedirect.com/science/article/pii/002437959190321M>
+
+%%
+% Evgenij E. Tyrtyshnikov,
+% Singular values of cauchy-toeplitz matrices,
+% _Linear Algebra and its Applications_ 161, 1992, 99-116,
+% <http://www.sciencedirect.com/science/article/pii/002437959290007W
+% http://www.sciencedirect.com/science/article/pii/002437959290007W>
+
+
+
+
+
+%%
+% _Copyright 2014 The MathWorks, Inc._
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>
